@@ -1,0 +1,60 @@
+version: "3.9"
+
+networks:
+  internal:
+    external: false
+
+volumes:
+  loan-api_data:
+
+services:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "8081:8081"
+  app:
+    network_mode: bridge
+    image: ol_task1-app:latest
+    working_dir: /app
+    ports:
+      - "8585:8585"
+      - "8586:8586"
+
+    environment:
+      - GOPRIVATE=localhost
+      - GONOSUMDB=off
+      - TZ=Asia/Almaty
+      - PORT=:8585
+      - DB=pg
+      - DB_HOST=postgres
+      - DB_NAME=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=admin
+      - DB_SSL=disable
+      - HASH_COST=6
+      - JWT_SECRET=my_secret_key_jwt_token_generation
+    networks:
+      - internal
+    depends_on:
+      - postgres
+      - redis
+  postgres:
+    image: postgres:13.2-alpine
+    volumes:
+      - loan-api_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    networks:
+      - internal
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:alpine
+    networks:
+      - internal
+    ports:
+      - "6379:6379"

@@ -27,7 +27,7 @@ func (s *Server) StartHTTPServer(ctx context.Context) error {
 
 	s.SetupRoutes()
 	if err := s.App.Start(s.cfg.Port); err != http.ErrServerClosed {
-
+		fmt.Printf("%v", err)
 	}
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)

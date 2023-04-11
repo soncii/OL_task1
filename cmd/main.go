@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
-	"login/Storage"
 	"login/config"
 	"login/service"
+	"login/storage"
 	"login/transport"
 )
 
 func main() {
 	run()
+
 }
 func run() {
 	ctx, cancel := context.WithCancel(context.Background())
@@ -18,10 +19,16 @@ func run() {
 	if err != nil {
 		return
 	}
-	st := Storage.NewStorage(cfg)
-	s := service.NewService(st)
-	h := transport.NewHandler(s)
+	st := storage.NewStorage(cfg)
+	userService := service.NewUserService(st, cfg)
+	bookService := service.NewBookService(st)
+	recordService := service.NewRecordService(st)
+	transactionService := service.NewTransactionService(st)
+	h := transport.NewHandler(userService, bookService, recordService, transactionService, cfg)
 	server := transport.NewServer(cfg, h)
-	server.StartHTTPServer(ctx)
+	err = server.StartHTTPServer(ctx)
+	if err != nil {
+		return
+	}
 
 }

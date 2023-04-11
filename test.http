@@ -1,0 +1,90 @@
+###Endpoint Task 2.1
+GET 192.168.99.100:8585/api/v1/users
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzExNjgsImlhdCI6MTY4MTA0NDc2OCwic3ViIjoidGVzdCJ9.Xf5ZbHAuDMkZLQO1jL5ihbPYWkVpvUu8_BF4bLQiZQY
+Content-Type: application/json
+###Endpoint Task 2.2
+GET 192.168.99.100:8081/api/v1/records/month
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzAzNTQsImlhdCI6MTY4MTA0Mzk1NCwic3ViIjoidGVzdCJ9.DiJ_2q-zcmXr5zCJpawXKWu9UyL-OaDTzmwEd3KEdWI
+Content-Type: application/json
+
+{
+  "Email": "test"
+}
+###Update Password
+POST localhost:8081/api/v1/password
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzI5NzgsImlhdCI6MTY4MTA0NjU3OCwic3ViIjoidGVzdCJ9.tr25SngsA7Sn2xsJLofpUPBz505q72run3KXkXPbUrE
+Content-Type: application/json
+
+{
+  "Password":"123"
+}
+
+###Create Transaction
+#POST localhost:8081/api/v1/transaction
+#Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzI5NzgsImlhdCI6MTY4MTA0NjU3OCwic3ViIjoidGVzdCJ9.tr25SngsA7Sn2xsJLofpUPBz505q72run3KXkXPbUrE
+#Content-Type: application/json
+#
+#{
+#  "UID": 1,
+#  "Books": [
+#    {
+#      "BookID": 1,
+#      "Price": 9.99,
+#      "Amount": 2
+#    },
+#    {
+#      "BookID": 2,
+#      "Price": 12.50,
+#      "Amount": 1
+#    },
+#    {
+#      "BookID": 3,
+#      "Price": 7.99,
+#      "Amount": 3
+#    }
+#  ]
+#}
+###
+POST localhost:8585/api/v1/user
+Content-Type: application/json
+
+{
+    "Name":"Damir",
+    "Email":"test",
+    "Password":"12345"
+}
+###
+POST localhost:8081/api/v1/login
+Content-Type: application/json
+
+{
+  "Email":"test",
+  "Password":"12345"
+}
+###
+POST localhost:8081/api/v1/book
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzExNjgsImlhdCI6MTY4MTA0NDc2OCwic3ViIjoidGVzdCJ9.Xf5ZbHAuDMkZLQO1jL5ihbPYWkVpvUu8_BF4bLQiZQY
+Content-Type: application/json
+
+{
+  "Title": "Java Book",
+  "Author": "DamirG"
+}
+
+###
+POST localhost:8081/api/v1/record
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzAyMjYsImlhdCI6MTY4MTA0MzgyNiwic3ViIjoidGVzdCJ9.ZnqWg549_IZGh9CF-zgLQ4d54dQYobVSATeYPYCNeSs
+Content-Type: application/json
+
+{
+  "UID": "1",
+  "BID": "3"
+}
+###
+GET localhost:8081/api/v1/records
+Content-Type: application/json
+
+{
+  "Email": "test"
+}
+

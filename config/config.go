@@ -1,18 +1,35 @@
 package config
 
-import "github.com/caarlos0/env/v6"
+import (
+	"fmt"
+	"github.com/caarlos0/env/v6"
+)
 
 type Config struct {
-	Port     string `env:"PORT" envDefault:":3000"`
-	DB       string `env:"DB" envDefault:"in-memory"`
-	Capacity int    `env:"CAPACITY" envDefault:"100"`
+	Port       string `env:"PORT" envDefault:":3000"`
+	DB         string `env:"DB" envDefault:"pg"`
+	DbHost     string `env:"DB_HOST"`
+	DbName     string `env:"DB_NAME"`
+	DbPort     string `env:"DB_PORT"`
+	DbUser     string `env:"DB_USER"`
+	DbPassword string `env:"DB_PASSWORD"`
+	DbSSL      string `env:"DB_SSL"`
+	HashCost   int    `env:"HASH_COST"`
+	JWTSecret  string `env:"JWT_SECRET"`
 }
 
 func NewConfig() (config *Config, err error) {
+	//err = godotenv.Load()
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return nil, err
+	//}
 	cfg := Config{}
 	error := env.Parse(&cfg)
 	if error != nil {
+		fmt.Println(error)
 		return nil, nil
 	}
+	fmt.Printf("%v", cfg)
 	return &cfg, error
 }
