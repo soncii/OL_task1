@@ -1,9 +1,10 @@
 package postgre
 
 import (
+	"context"
 	"fmt"
 	"gorm.io/gorm"
-	"login/entities"
+	"login/model"
 )
 
 type UserRepository struct {
@@ -14,27 +15,26 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
 
-func (r *UserRepository) GetUserByEmail(email string) *entities.User {
-	u := &entities.User{}
-	r.db.Where("email=?", email).First(u)
-	return u
+func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (*model.User, error) {
+	u := &model.User{}
+	return u, r.db.Where("email=?", email).First(u).Error
+
 }
-func (r *UserRepository) GetUserByID(UID uint) *entities.User {
-	u := &entities.User{}
-	r.db.Where("id=?", UID).First(u)
-	return u
+func (r *UserRepository) GetUserByID(ctx context.Context, UID uint) (*model.User, error) {
+	u := &model.User{}
+	return u, r.db.Where("id=?", UID).First(u).Error
+
 }
 
-func (r *UserRepository) CreateUser(user *entities.User) {
-	r.db.Create(user)
+func (r *UserRepository) CreateUser(ctx context.Context, user *model.User) error {
+	return r.db.Create(user).Error
 }
 
-func (r *UserRepository) Delete() {
-	//TODO implement me
-	panic("implement me")
+func (r *UserRepository) Delete(ctx context.Context) error {
+	return nil
 }
 
-func (r *UserRepository) Update(user *entities.User) error {
+func (r *UserRepository) Update(ctx context.Context, user *model.User) error {
 	err := r.db.First(&user).Error
 	if err != nil {
 		return err
@@ -42,31 +42,34 @@ func (r *UserRepository) Update(user *entities.User) error {
 	return nil
 }
 
-func (r *UserRepository) GetUserRecords(email string) []*entities.Record {
-	var user entities.User
-	err := r.db.Model(&entities.User{}).Preload("Records").Where("email=?", email).First(&user).Error
+func (r *UserRepository) GetUserRecords(ctx context.Context, email string) ([]*model.Record, error) {
+	var user model.User
+	err := r.db.Model(&model.User{}).Preload("Records").Where("email=?", email).First(&user).Error
 	if err != nil {
 		fmt.Print(err)
+		return nil, err
 	}
-	return user.Records
+	return user.Records, nil
 }
 
-func (r *UserRepository) GetUsers() []*entities.User {
-	var users []*entities.User
-	err := r.db.Model(&entities.User{}).Preload("Records", "borrowed=true").
+func (r *UserRepository) GetUsers(ctx context.Context) ([]*model.User, error) {
+	var users []*model.User
+	err := r.db.Model(&model.User{}).Preload("Records", "borrowed=true").
 		Preload("Records.Book").Find(&users).Error
 	if err != nil {
 		fmt.Print(err)
+		return nil, err
 	}
-	return users
+	return users, nil
 }
-func (r *UserRepository) GetUsersLastMonth(time string) []*entities.User {
-	var users []*entities.User
-	err := r.db.Model(&entities.User{}).
+func (r *UserRepository) GetUsersLastMonth(ctx context.Context, time string) ([]*model.User, error) {
+	var users []*model.User
+	err := r.db.Model(&model.User{}).
 		Preload("Records", fmt.Sprintf("taken_at>'%v'", time)).
 		Find(&users).Error
 	if err != nil {
 		fmt.Print(err)
+		return nil, err
 	}
-	return users
+	return users, err
 }

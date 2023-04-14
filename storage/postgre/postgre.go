@@ -5,7 +5,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"login/config"
-	"login/entities"
+	"login/model"
 )
 
 func Dial(cfg *config.Config) (*gorm.DB, error) {
@@ -16,8 +16,7 @@ func Dial(cfg *config.Config) (*gorm.DB, error) {
 		fmt.Print(err)
 		return nil, err
 	}
-	err = db.AutoMigrate(&entities.User{}, &entities.Record{}, &entities.Book{},
-		&entities.TransactionDetails{}, &entities.Transaction{})
+	err = db.AutoMigrate(&model.User{}, &model.Record{}, &model.Book{})
 	if err != nil {
 		fmt.Print(err)
 		return nil, err

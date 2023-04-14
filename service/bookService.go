@@ -1,11 +1,18 @@
 package service
 
 import (
+	"context"
+	"errors"
 	"fmt"
-	"login/entities"
 	"login/model"
 	"login/storage"
 )
+
+type IBookService interface {
+	Get(ctx context.Context) error
+	Create(ctx context.Context, req model.BookCreateReq) (model.BookCreateResp, error)
+	Delete(ctx context.Context) error
+}
 
 type BookService struct {
 	r *storage.Storage
@@ -14,16 +21,20 @@ type BookService struct {
 func NewBookService(r *storage.Storage) *BookService {
 	return &BookService{r: r}
 }
-func (s *BookService) Get() {
+func (s *BookService) Get(ctx context.Context) error {
+	return errors.New("IMPLEMENT ME!")
 }
 
-func (s *BookService) Create(req model.BookCreateReq) model.BookCreateResp {
-	b := entities.Book{Title: req.Title, Author: req.Author}
+func (s *BookService) Create(ctx context.Context, req model.BookCreateReq) (model.BookCreateResp, error) {
+	b := model.Book{Title: req.Title, Author: req.Author}
 	fmt.Printf("Printing from service:%v\n", b)
-	s.r.BookRepo.CreateBook(&b)
-	return model.BookCreateResp{BID: b.ID, CreatedAt: b.CreatedAt}
+	err := s.r.BookRepo.CreateBook(ctx, &b)
+	if err != nil {
+		return model.BookCreateResp{}, err
+	}
+	return model.BookCreateResp{BID: b.ID, CreatedAt: b.CreatedAt}, nil
 }
 
-func (*BookService) Delete() {
-
+func (*BookService) Delete(ctx context.Context) error {
+	return errors.New("IMPLEMENT ME!")
 }

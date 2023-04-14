@@ -1,8 +1,9 @@
 package postgre
 
 import (
+	"context"
 	"gorm.io/gorm"
-	"login/entities"
+	"login/model"
 )
 
 type RecordRepository struct {
@@ -12,16 +13,20 @@ type RecordRepository struct {
 func NewRecordRepository(db *gorm.DB) *RecordRepository {
 	return &RecordRepository{db: db}
 }
-func (r *RecordRepository) GetRecordsByEmail(email string) []*entities.Record {
-	result := make([]*entities.Record, 10)
-	return result
+func (r *RecordRepository) GetRecordsByEmail(ctx context.Context, email string) ([]*model.Record, error) {
+	record := make([]*model.Record, 0)
+	err := r.db.Where("email=?", email).Find(&record).Error
+	if err != nil {
+		return nil, err
+	}
+	return record, nil
 }
 
-func (r *RecordRepository) CreateRecord(record *entities.Record) {
-	r.db.Create(record)
+func (r *RecordRepository) CreateRecord(ctx context.Context, record *model.Record) error {
+	return r.db.Create(record).Error
 }
 
-func (r *RecordRepository) DeleteRecord() {
+func (r *RecordRepository) DeleteRecord(ctx context.Context) error {
 	//TODO implement me
 	panic("implement me")
 }

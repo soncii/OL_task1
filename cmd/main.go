@@ -5,7 +5,7 @@ import (
 	"login/config"
 	"login/service"
 	"login/storage"
-	"login/transport"
+	"login/transport/http"
 )
 
 func main() {
@@ -20,12 +20,9 @@ func run() {
 		return
 	}
 	st := storage.NewStorage(cfg)
-	userService := service.NewUserService(st, cfg)
-	bookService := service.NewBookService(st)
-	recordService := service.NewRecordService(st)
-	transactionService := service.NewTransactionService(st)
-	h := transport.NewHandler(userService, bookService, recordService, transactionService, cfg)
-	server := transport.NewServer(cfg, h)
+	m := service.NewManager(st, cfg)
+	h := http.NewHandler(m, cfg)
+	server := http.NewServer(cfg, h)
 	err = server.StartHTTPServer(ctx)
 	if err != nil {
 		return

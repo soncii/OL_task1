@@ -1,4 +1,4 @@
-package transport
+package http
 
 func (s *Server) SetupRoutes() {
 	v1 := s.App.Group("/api/v1")
@@ -9,7 +9,6 @@ func (s *Server) SetupRoutes() {
 	jwtGroup.POST("/book", s.handler.CreateBook)
 	jwtGroup.POST("/password", s.handler.ChangePassword)
 	jwtGroup.POST("/record", s.handler.CreateRecord)
-	jwtGroup.POST("/transaction", s.handler.CreateTransaction)
 
 	jwtGroup.GET("/records", s.handler.GetRecords)
 	jwtGroup.GET("/records/month", s.handler.GetUsersLastMonth)

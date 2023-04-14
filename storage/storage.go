@@ -1,43 +1,40 @@
 package storage
 
 import (
+	"context"
+	//_ "github.com/golang/mock/mockgen/model"
 	"gorm.io/gorm"
 	"login/config"
-	"login/entities"
+	"login/model"
 	"login/storage/postgre"
 )
 
 type IUserRepository interface {
-	GetUsers() []*entities.User
-	GetUsersLastMonth(time string) []*entities.User
-	GetUserByID(UID uint) *entities.User
-	GetUserByEmail(email string) *entities.User
-	GetUserRecords(email string) []*entities.Record
-	Update(user *entities.User) error
-	CreateUser(user *entities.User)
-	Delete()
+	GetUsers(ctx context.Context) ([]*model.User, error)
+	GetUsersLastMonth(ctx context.Context, time string) ([]*model.User, error)
+	GetUserByID(ctx context.Context, UID uint) (*model.User, error)
+	GetUserByEmail(ctx context.Context, email string) (*model.User, error)
+	GetUserRecords(ctx context.Context, email string) ([]*model.Record, error)
+	Update(ctx context.Context, user *model.User) error
+	CreateUser(ctx context.Context, user *model.User) error
+	Delete(ctx context.Context) error
 }
 type IBookRepository interface {
-	GetBookByTitle(title string) *entities.Book
-	CreateBook(book *entities.Book)
-	DeleteBook()
+	GetBookByTitle(ctx context.Context, title string) (*model.Book, error)
+	CreateBook(ctx context.Context, book *model.Book) error
+	DeleteBook(ctx context.Context) error
 }
 type IRecordRepository interface {
-	GetRecordsByEmail(email string) []*entities.Record
-	CreateRecord(record *entities.Record)
-	DeleteRecord()
+	GetRecordsByEmail(ctx context.Context, email string) ([]*model.Record, error)
+	CreateRecord(ctx context.Context, record *model.Record) error
+	DeleteRecord(ctx context.Context) error
 }
-type ITransactionRepository interface {
-	Get() error
-	CreateTransaction(tr *entities.Transaction, trDetails []*entities.TransactionDetails) error
-	Delete() error
-}
+
 type Storage struct {
-	DB              *gorm.DB
-	UserRepo        IUserRepository
-	BookRepo        IBookRepository
-	RecordRepo      IRecordRepository
-	TransactionRepo ITransactionRepository
+	DB         *gorm.DB
+	UserRepo   IUserRepository
+	BookRepo   IBookRepository
+	RecordRepo IRecordRepository
 }
 
 func NewStorage(cfg *config.Config) *Storage {
@@ -48,7 +45,7 @@ func NewStorage(cfg *config.Config) *Storage {
 			return nil
 		}
 		return &Storage{DB: db, UserRepo: postgre.NewUserRepository(db), BookRepo: postgre.NewBookRepository(db),
-			RecordRepo: postgre.NewRecordRepository(db), TransactionRepo: postgre.NewTransactionRepository(db)}
+			RecordRepo: postgre.NewRecordRepository(db)}
 	}
 	return nil
 }
