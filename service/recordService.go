@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"login/model"
 	"login/storage"
 	"strconv"
@@ -30,6 +31,17 @@ func (s *RecordService) Create(ctx context.Context, req model.RecordCreateReq) (
 	}
 	bid, err1 := strconv.Atoi(req.BID)
 	if err1 != nil {
+		return model.RecordCreateResp{}, err1
+	}
+	if uid < 0 || bid < 0 {
+		return model.RecordCreateResp{}, errors.New("negative uid or bid")
+	}
+	_, err = s.r.UserRepo.GetUserByID(ctx, uint(uid))
+	if err != nil {
+		return model.RecordCreateResp{}, err
+	}
+	_, err = s.r.BookRepo.GetBookByID(ctx, uint(bid))
+	if err != nil {
 		return model.RecordCreateResp{}, err
 	}
 	r := model.Record{UserID: uint(uid), BookID: uint(bid), TakenAt: time.Now(), Borrowed: true}

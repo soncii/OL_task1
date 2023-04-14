@@ -20,9 +20,10 @@ type IUserRepository interface {
 	Delete(ctx context.Context) error
 }
 type IBookRepository interface {
+	GetBookByID(ctx context.Context, bid uint) (*model.Book, error)
 	GetBookByTitle(ctx context.Context, title string) (*model.Book, error)
 	CreateBook(ctx context.Context, book *model.Book) error
-	DeleteBook(ctx context.Context) error
+	DeleteBook(ctx context.Context, bid uint) error
 }
 type IRecordRepository interface {
 	GetRecordsByEmail(ctx context.Context, email string) ([]*model.Record, error)
@@ -37,15 +38,15 @@ type Storage struct {
 	RecordRepo IRecordRepository
 }
 
-func NewStorage(cfg *config.Config) *Storage {
+func NewStorage(cfg *config.Config) (*Storage, error) {
 	if cfg.DB == "pg" {
 		db, err := postgre.Dial(cfg)
 		db = db.Debug()
 		if err != nil {
-			return nil
+			return nil, err
 		}
 		return &Storage{DB: db, UserRepo: postgre.NewUserRepository(db), BookRepo: postgre.NewBookRepository(db),
-			RecordRepo: postgre.NewRecordRepository(db)}
+			RecordRepo: postgre.NewRecordRepository(db)}, nil
 	}
-	return nil
+	return &Storage{}, nil
 }

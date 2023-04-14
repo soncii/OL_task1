@@ -28,7 +28,18 @@ func (r *BookRepository) CreateBook(ctx context.Context, book *model.Book) error
 
 }
 
-func (r *BookRepository) DeleteBook(ctx context.Context) error {
-	//TODO implement me
-	panic("implement me")
+func (r *BookRepository) DeleteBook(ctx context.Context, bid uint) error {
+	err := r.db.Delete(&model.Book{}, bid).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (r *BookRepository) GetBookByID(ctx context.Context, bid uint) (*model.Book, error) {
+	b := &model.Book{}
+	err := r.db.Where("id=?", bid).First(b).Error
+	if err != nil {
+		return &model.Book{}, err
+	}
+	return b, nil
 }

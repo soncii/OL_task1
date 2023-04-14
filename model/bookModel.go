@@ -17,7 +17,14 @@ type BookCreateReq struct {
 	Title  string
 	Author string
 }
-
+type BookGetByIDReq struct {
+	BID uint
+}
+type BookGetByIDResp struct {
+	BID    uint
+	Title  string
+	Author string
+}
 type BookCreateResp struct {
 	BID       uint
 	CreatedAt time.Time

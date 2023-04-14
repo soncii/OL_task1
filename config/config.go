@@ -19,18 +19,17 @@ type Config struct {
 	JWTSecret  string `env:"JWT_SECRET"`
 }
 
-func NewConfig() (config *Config, err error) {
-	err = godotenv.Load()
+func NewConfig() (*Config, error) {
+	err := godotenv.Load()
+	if err != nil {
+		return nil, err
+	}
+	cfg := Config{}
+	err = env.Parse(&cfg)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
 	}
-	cfg := Config{}
-	err1 := env.Parse(&cfg)
-	if err1 != nil {
-		fmt.Println(err1)
-		return nil, err1
-	}
 	fmt.Printf("%v", cfg)
-	return &cfg, err1
+	return &cfg, nil
 }

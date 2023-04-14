@@ -2,16 +2,14 @@ package service
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"login/model"
 	"login/storage"
 )
 
 type IBookService interface {
-	Get(ctx context.Context) error
+	GetByID(ctx context.Context, bid model.BookGetByIDReq) (*model.Book, error)
 	Create(ctx context.Context, req model.BookCreateReq) (model.BookCreateResp, error)
-	Delete(ctx context.Context) error
+	DeleteByID(ctx context.Context, bid model.BookGetByIDReq) (bool, error)
 }
 
 type BookService struct {
@@ -21,13 +19,16 @@ type BookService struct {
 func NewBookService(r *storage.Storage) *BookService {
 	return &BookService{r: r}
 }
-func (s *BookService) Get(ctx context.Context) error {
-	return errors.New("IMPLEMENT ME!")
+func (s *BookService) GetByID(ctx context.Context, bid model.BookGetByIDReq) (*model.Book, error) {
+	book, err := s.r.BookRepo.GetBookByID(ctx, bid.BID)
+	if err != nil {
+		return nil, err
+	}
+	return book, nil
 }
 
 func (s *BookService) Create(ctx context.Context, req model.BookCreateReq) (model.BookCreateResp, error) {
 	b := model.Book{Title: req.Title, Author: req.Author}
-	fmt.Printf("Printing from service:%v\n", b)
 	err := s.r.BookRepo.CreateBook(ctx, &b)
 	if err != nil {
 		return model.BookCreateResp{}, err
@@ -35,6 +36,10 @@ func (s *BookService) Create(ctx context.Context, req model.BookCreateReq) (mode
 	return model.BookCreateResp{BID: b.ID, CreatedAt: b.CreatedAt}, nil
 }
 
-func (*BookService) Delete(ctx context.Context) error {
-	return errors.New("IMPLEMENT ME!")
+func (s *BookService) DeleteByID(ctx context.Context, bid model.BookGetByIDReq) (bool, error) {
+	err := s.r.BookRepo.DeleteBook(ctx, bid.BID)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"login/config"
 	"login/service"
 	"login/storage"
@@ -9,23 +10,26 @@ import (
 )
 
 func main() {
-	run()
+	log.Fatal(run())
 
 }
-func run() {
+func run() error {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	cfg, err := config.NewConfig()
 	if err != nil {
-		return
+		return err
 	}
-	st := storage.NewStorage(cfg)
+	st, err := storage.NewStorage(cfg)
+	if err != nil {
+		return err
+	}
 	m := service.NewManager(st, cfg)
 	h := http.NewHandler(m, cfg)
 	server := http.NewServer(cfg, h)
 	err = server.StartHTTPServer(ctx)
 	if err != nil {
-		return
+		return err
 	}
-
+	return nil
 }
