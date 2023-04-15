@@ -21,6 +21,7 @@ type IUserService interface {
 	GetUserRecords(ctx context.Context, email string) (model.RecordGetCurrentUserResp, error)
 	GetUsers(ctx context.Context) (model.GetUsersResp, error)
 	GetUsersLastMonth(ctx context.Context) (model.GetUsersWithRecordResp, error)
+	Delete(ctx context.Context, req model.UserDeleteReq) error
 }
 
 func NewUserService(r *storage.Storage, cfg *config.Config) *UserService {
@@ -53,9 +54,6 @@ func (s *UserService) UpdatePassword(ctx context.Context, req model.UserEmailPas
 		return model.UserChangePassResp{}, err
 	}
 	return model.UserChangePassResp{UpdatedAt: u.UpdatedAt}, nil
-}
-func (s *UserService) Delete(ctx context.Context) {
-
 }
 
 func (s *UserService) Validate(ctx context.Context, req model.UserCreateReq) (bool, error) {
@@ -102,4 +100,7 @@ func (s *UserService) GetUsersLastMonth(ctx context.Context) (model.GetUsersWith
 		UsersWithRecord = append(UsersWithRecord, model.UserWithRecord{ID: u.ID, Name: u.Name, Email: u.Email, Count: len(u.Records)})
 	}
 	return model.GetUsersWithRecordResp{Users: UsersWithRecord}, nil
+}
+func (s *UserService) Delete(ctx context.Context, req model.UserDeleteReq) error {
+	return s.r.UserRepo.Delete(ctx, req.UID, req.Hard)
 }

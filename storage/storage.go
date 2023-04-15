@@ -17,7 +17,7 @@ type IUserRepository interface {
 	GetUserRecords(ctx context.Context, email string) ([]*model.Record, error)
 	Update(ctx context.Context, user *model.User) error
 	CreateUser(ctx context.Context, user *model.User) error
-	Delete(ctx context.Context) error
+	Delete(ctx context.Context, uid uint, hard bool) error
 }
 type IBookRepository interface {
 	GetBookByID(ctx context.Context, bid uint) (*model.Book, error)

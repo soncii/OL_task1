@@ -29,7 +29,7 @@ func (r *BookRepository) CreateBook(ctx context.Context, book *model.Book) error
 }
 
 func (r *BookRepository) DeleteBook(ctx context.Context, bid uint) error {
-	err := r.db.Delete(&model.Book{}, bid).Error
+	err := r.db.Unscoped().Delete(&model.Book{}, bid).Error
 	if err != nil {
 		return err
 	}

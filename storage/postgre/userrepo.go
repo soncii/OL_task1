@@ -30,8 +30,11 @@ func (r *UserRepository) CreateUser(ctx context.Context, user *model.User) error
 	return r.db.Create(user).Error
 }
 
-func (r *UserRepository) Delete(ctx context.Context) error {
-	return nil
+func (r *UserRepository) Delete(ctx context.Context, uid uint, hard bool) error {
+	if hard {
+		return r.db.Unscoped().Delete(&model.User{}, uid).Error
+	}
+	return r.db.Delete(&model.User{}, uid).Error
 }
 
 func (r *UserRepository) Update(ctx context.Context, user *model.User) error {

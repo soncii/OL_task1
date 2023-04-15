@@ -24,12 +24,11 @@ func (h *Handler) CreateUser(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Print(req)
 	resp, err := h.Manager.UserService.Create(c.Request().Context(), req)
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusCreated, resp)
 }
 func (h *Handler) CreateBook(c echo.Context) error {
 	var req model.BookCreateReq
@@ -42,7 +41,7 @@ func (h *Handler) CreateBook(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	return c.JSON(http.StatusOK, resp)
+	return c.JSON(http.StatusCreated, resp)
 }
 func (h *Handler) Validate(c echo.Context) error {
 	var req model.UserCreateReq
@@ -107,7 +106,7 @@ func (h *Handler) CreateRecord(c echo.Context) error {
 		fmt.Println(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, d)
+	return c.JSON(http.StatusCreated, d)
 }
 func (h *Handler) GetUsersWithBooks(c echo.Context) error {
 
@@ -116,7 +115,7 @@ func (h *Handler) GetUsersWithBooks(c echo.Context) error {
 		fmt.Println(err)
 		return err
 	}
-	return c.JSON(http.StatusOK, users)
+	return c.JSON(http.StatusCreated, users)
 }
 func (h *Handler) GetUsersLastMonth(c echo.Context) error {
 	users, err := h.Manager.UserService.GetUsersLastMonth(c.Request().Context())

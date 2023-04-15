@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-//Integration Test
+//Integration Test Book creation, retrieval, and deletion
 func TestBookService_Create(t *testing.T) {
 	//Initialization
 	cfg, err := config.NewConfig()

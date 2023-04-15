@@ -39,7 +39,10 @@ type UserCreateReq struct {
 	Email    string
 	Password string
 }
-
+type UserDeleteReq struct {
+	UID  uint
+	Hard bool
+}
 type UserCreateResp struct {
 	UID       uint
 	CreatedAt time.Time

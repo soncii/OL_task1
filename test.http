@@ -25,7 +25,7 @@ Content-Type: application/json
 
 {
     "Name":"Damir",
-    "Email":"test",
+    "Email":"dummy",
     "Password":"12345"
 }
 ###Login Get Token
