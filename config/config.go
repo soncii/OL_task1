@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"github.com/caarlos0/env/v6"
-	"github.com/joho/godotenv"
 )
 
 type Config struct {
@@ -20,12 +19,12 @@ type Config struct {
 }
 
 func NewConfig() (*Config, error) {
-	err := godotenv.Load()
-	if err != nil {
-		return nil, err
-	}
+	//err := godotenv.Load()
+	//if err != nil {
+	//	return nil, err
+	//}
 	cfg := Config{}
-	err = env.Parse(&cfg)
+	err := env.Parse(&cfg)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err
