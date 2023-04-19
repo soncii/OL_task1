@@ -1,0 +1,84 @@
+definitions:
+  model.Transaction:
+    properties:
+      bookID:
+        type: integer
+      id:
+        type: integer
+      price:
+        type: number
+      userID:
+        type: integer
+    type: object
+  model.TransactionCreateReq:
+    properties:
+      bid:
+        type: integer
+      price:
+        type: number
+      uid:
+        type: integer
+    type: object
+  model.TransactionCreateResp:
+    properties:
+      tid:
+        type: integer
+    type: object
+info:
+  contact: {}
+  description: This is a microservice for book borrowing transactions
+  termsOfService: http://swagger.io/terms/
+  title: Transaction API
+  version: "1.0"
+paths:
+  /transaction:
+    get:
+      consumes:
+      - application/json
+      description: Return transaction information by id
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: tid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Transaction'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get transaction by id
+      tags:
+      - Transaction
+    post:
+      consumes:
+      - application/json
+      description: Saves the money transaction for borrowing book
+      parameters:
+      - description: Details of borrowing contains bookID, userID, and the price
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.TransactionCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TransactionCreateResp'
+      summary: Register transaction
+      tags:
+      - Transaction
+swagger: "2.0"
