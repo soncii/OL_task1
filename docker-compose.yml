@@ -24,7 +24,7 @@ services:
     environment:
       - TZ=Asia/Almaty
       - PORT=:8585
-      - TR_URL=http://transactions/api/v1
+      - TR_URL=http://transactions:8787/api/v1
       - DB=pg
       - DB_HOST=postgres
       - DB_NAME=postgres

@@ -1,8 +1,9 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type Record struct {
@@ -17,6 +18,29 @@ type Record struct {
 	TakenAt       time.Time
 	ReturnedAt    time.Time
 	Borrowed      bool
+}
+type RecordWithTransaction struct {
+	ID            uint
+	UserID        uint
+	BookID        uint
+	TransactionID uint
+	TakenAt       time.Time
+	ReturnedAt    time.Time
+	Borrowed      bool
+	Price         float64
+}
+
+func (r *Record) MapWithPrice(price float64) *RecordWithTransaction {
+	return &RecordWithTransaction{
+		ID:            r.ID,
+		UserID:        r.UserID,
+		BookID:        r.BookID,
+		TransactionID: r.TransactionID,
+		TakenAt:       r.TakenAt,
+		ReturnedAt:    r.ReturnedAt,
+		Borrowed:      r.Borrowed,
+		Price:         price,
+	}
 }
 
 type RecordGetCurrentUserReq struct {
@@ -40,6 +64,12 @@ type TransactionCreateReq struct {
 }
 type TransactionCreateResp struct {
 	TID uint
+}
+type TransactionGetResp struct {
+	ID     uint
+	BookID uint
+	Price  float64
+	UserID uint
 }
 type RecordCreateResp struct {
 	RID       uint

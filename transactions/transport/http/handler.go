@@ -1,12 +1,14 @@
 package http
 
 import (
-	"github.com/labstack/echo/v4"
 	"net/http"
 	"strconv"
+
 	"transactions/config"
 	"transactions/model"
 	"transactions/service"
+
+	"github.com/labstack/echo/v4"
 )
 
 type Handler struct {
@@ -51,7 +53,7 @@ func (h *Handler) CreateTransaction(c echo.Context) error {
 // @Success      200  {object} model.Transaction
 // @Failure 	 400 {string} string "Bad Request"
 // @Failure 	 500 {string} string "Internal Server Error"
-// @Router       /transaction [get]
+// @Router       /transaction/{tid} [get]
 func (h *Handler) GetTransaction(c echo.Context) error {
 	str := c.Param("tid")
 	tid, err := strconv.Atoi(str)

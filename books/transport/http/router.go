@@ -1,8 +1,9 @@
 package http
 
 import (
-	echoSwagger "github.com/swaggo/echo-swagger"
 	_ "login/docs"
+
+	echoSwagger "github.com/swaggo/echo-swagger"
 )
 
 func (s *Server) SetupRoutes() {
@@ -19,7 +20,7 @@ func (s *Server) SetupRoutes() {
 	jwtGroup.GET("/records", s.handler.GetRecords)
 	jwtGroup.GET("/records/month", s.handler.GetUsersLastMonth)
 	jwtGroup.GET("/users", s.handler.GetUsersWithBooks)
-
+	jwtGroup.GET("/record/:rid", s.handler.GetRecordByID)
 	v1.POST("/user", s.handler.CreateUser)
 	v1.POST("/login", s.handler.Validate)
 }

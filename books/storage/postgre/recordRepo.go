@@ -2,8 +2,10 @@ package postgre
 
 import (
 	"context"
-	"gorm.io/gorm"
+
 	"login/model"
+
+	"gorm.io/gorm"
 )
 
 type RecordRepository struct {
@@ -21,7 +23,10 @@ func (r *RecordRepository) GetRecordsByEmail(ctx context.Context, email string) 
 	}
 	return record, nil
 }
-
+func (r *RecordRepository) GetRecordByID(ctx context.Context, rid int) (*model.Record, error) {
+	res := &model.Record{}
+	return res, r.db.First(res, rid).Error
+}
 func (r *RecordRepository) CreateRecord(ctx context.Context, record *model.Record) error {
 	return r.db.Create(record).Error
 }

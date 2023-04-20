@@ -1,10 +1,10 @@
 ###Endpoint Task 2.1
 GET localhost:8585/api/v1/users
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODE4OTgwMzMsImlhdCI6MTY4MTgxMTYzMywic3ViIjoiRGFtaXIifQ.cRF455j9M_BjTGbbCEaG9Y0n75O6Az_xedQfEAYvuXo
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
 Content-Type: application/json
 ###Endpoint Task 2.2
 GET localhost:8585/api/v1/records/month
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODE4OTgwMzMsImlhdCI6MTY4MTgxMTYzMywic3ViIjoiRGFtaXIifQ.cRF455j9M_BjTGbbCEaG9Y0n75O6Az_xedQfEAYvuXo
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
 Content-Type: application/json
 
 {
@@ -38,7 +38,7 @@ Content-Type: application/json
 }
 ###Add Book
 POST localhost:8585/api/v1/book
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODE4OTgwMzMsImlhdCI6MTY4MTgxMTYzMywic3ViIjoiRGFtaXIifQ.cRF455j9M_BjTGbbCEaG9Y0n75O6Az_xedQfEAYvuXo
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
 Content-Type: application/json
 
 {
@@ -47,27 +47,30 @@ Content-Type: application/json
 }
 
 ### Add Record
-POST localhost:8181/api/v1/record
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODE4OTgwMzMsImlhdCI6MTY4MTgxMTYzMywic3ViIjoiRGFtaXIifQ.cRF455j9M_BjTGbbCEaG9Y0n75O6Az_xedQfEAYvuXo
+POST localhost:8585/api/v1/borrow
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
 Content-Type: application/json
 
 {
-  "UID": 34,
-  "BID": 22,
-  "Price": 1000
+  "UID": 1,
+  "BID": 3,
+  "Price": 5000
 }
-### Get Borrowed Books
-GET localhost:8585/api/v1/books/active
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODE4OTgwMzMsImlhdCI6MTY4MTgxMTYzMywic3ViIjoiRGFtaXIifQ.cRF455j9M_BjTGbbCEaG9Y0n75O6Az_xedQfEAYvuXo
+### Get All Borrowed Books With Revenue
+GET localhost:8585/api/v1/books/borrowed
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
 Content-Type: application/json
 
 
 ### Get All Records of the user
 GET localhost:8585/api/v1/records
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODE4OTgwMzMsImlhdCI6MTY4MTgxMTYzMywic3ViIjoiRGFtaXIifQ.cRF455j9M_BjTGbbCEaG9Y0n75O6Az_xedQfEAYvuXo
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
 Content-Type: application/json
 
 {
   "Email": "test"
 }
+### Get Transaction
+GET localhost:8787/api/v1/transaction/2
+Content-Type: application/json
 

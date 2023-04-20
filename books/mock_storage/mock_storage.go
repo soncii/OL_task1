@@ -328,6 +328,21 @@ func (mr *MockIRecordRepositoryMockRecorder) GetBorrowedRecordByBID(ctx, bid int
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBorrowedRecordByBID", reflect.TypeOf((*MockIRecordRepository)(nil).GetBorrowedRecordByBID), ctx, bid)
 }
 
+// GetRecordByID mocks base method.
+func (m *MockIRecordRepository) GetRecordByID(ctx context.Context, rid int) (*model.Record, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetRecordByID", ctx, rid)
+	ret0, _ := ret[0].(*model.Record)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetRecordByID indicates an expected call of GetRecordByID.
+func (mr *MockIRecordRepositoryMockRecorder) GetRecordByID(ctx, rid interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRecordByID", reflect.TypeOf((*MockIRecordRepository)(nil).GetRecordByID), ctx, rid)
+}
+
 // GetRecordsByEmail mocks base method.
 func (m *MockIRecordRepository) GetRecordsByEmail(ctx context.Context, email string) ([]*model.Record, error) {
 	m.ctrl.T.Helper()

@@ -1,14 +1,15 @@
 package http
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"github.com/labstack/echo/v4"
+	"net/http"
+	"strconv"
+
 	"login/config"
 	"login/model"
 	"login/service"
-	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
 type Handler struct {
@@ -180,29 +181,7 @@ func (h *Handler) CreateRecord(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Something went wrong!")
 	}
-	d, err := h.Manager.RecordService.CreateRecord(c.Request().Context(), req)
-	if err != nil {
-		return c.JSON(400, err.Error())
-	}
-	reqBody := []byte(fmt.Sprintf(`{"UID":%d, "BID":%v, "Price":%v}`,
-		req.UID, req.BID, req.Price))
-	r, _ := http.NewRequest(http.MethodPost, h.TransactionURL+"/transaction", bytes.NewBuffer(reqBody))
-	r.Header.Set("Content-Type", "application/json")
-	client := &http.Client{}
-	resp, err := client.Do(r)
-	if err != nil {
-		fmt.Println(err)
-		return c.JSON(http.StatusInternalServerError, "Something went wrong!")
-	}
-	var createResp model.TransactionCreateResp
-	if err := json.NewDecoder(resp.Body).Decode(&createResp); err != nil {
-		return c.JSON(http.StatusInternalServerError, "Something went wrong!")
-	}
-	d.TransactionID = createResp.TID
-	err = h.Manager.RecordService.UpdateRecord(c.Request().Context(), d)
-	if err != nil {
-		return err
-	}
+	d, err := h.Manager.RecordService.CreateRecord(c.Request().Context(), req, h.TransactionURL)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Something went wrong!")
 	}
@@ -243,7 +222,8 @@ func (h *Handler) GetUsersWithBooks(c echo.Context) error {
 // @Param Authorization header string true "JWT Token"
 // @Accept       json
 // @Produce      json
-// @Success      200  {array} model.User
+// @Success      200  {array} model.
+// @Failure      500  {string} error "Something went wrong!"
 // @Router       /records/month [get]
 func (h *Handler) GetUsersLastMonth(c echo.Context) error {
 	users, err := h.Manager.UserService.GetUsersLastMonth(c.Request().Context())
@@ -264,6 +244,7 @@ func (h *Handler) GetUsersLastMonth(c echo.Context) error {
 // @Accept       json
 // @Produce      json
 // @Success      200  {array} model.Book
+// @Failure      500  {string} error "Something went wrong!"
 // @Router       /books/borrowed [get]
 func (h *Handler) GetBorrowedBooks(c echo.Context) error {
 	Books, err := h.Manager.RecordService.GetBorrowedBooks(c.Request().Context())
@@ -271,4 +252,31 @@ func (h *Handler) GetBorrowedBooks(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Something went wrong!")
 	}
 	return c.JSON(http.StatusOK, Books)
+}
+
+// GetRecordByID godoc
+//
+// @Summary Get borrow record with price
+// @Description  Retrieves the record of book borrowing with price by ID
+// @Security      BearerAuth
+// @Tags         Record
+// @Param rid  path string true "Record ID"
+// @Param Authorization header string true "JWT Token"
+// @Accept       json
+// @Produce      json
+// @Success      200  {array} model.RecordWithTransaction
+// @Failure      400  {string} error "Bad Request"
+// @Failure      500  {string} error "Internal Server Error"
+// @Router       /record/{rid} [get]
+func (h *Handler) GetRecordByID(c echo.Context) error {
+	str := c.Param("rid")
+	rid, err := strconv.Atoi(str)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, "")
+	}
+	record, err := h.Manager.RecordService.Get(c.Request().Context(), rid, h.TransactionURL)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, "something went wrong!")
+	}
+	return c.JSON(http.StatusOK, record)
 }

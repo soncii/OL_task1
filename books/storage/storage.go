@@ -3,8 +3,9 @@ package storage
 
 import (
 	"context"
-	//_ "github.com/golang/mock/mockgen/model"
+
 	"gorm.io/gorm"
+
 	"login/config"
 	"login/model"
 	"login/storage/postgre"
@@ -34,6 +35,7 @@ type IRecordRepository interface {
 	UpdateRecord(ctx context.Context, record *model.Record) error
 	GetBorrowedRecordByBID(ctx context.Context, bid uint) (*model.Record, error)
 	GetBorrowedBooks(ctx context.Context) ([]model.BookWithRevenue, error)
+	GetRecordByID(ctx context.Context, rid int) (*model.Record, error)
 }
 
 type Storage struct {
