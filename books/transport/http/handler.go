@@ -222,7 +222,7 @@ func (h *Handler) GetUsersWithBooks(c echo.Context) error {
 // @Param Authorization header string true "JWT Token"
 // @Accept       json
 // @Produce      json
-// @Success      200  {array} model.
+// @Success      200  {array} model.GetUsersWithRecordResp
 // @Failure      500  {string} error "Something went wrong!"
 // @Router       /records/month [get]
 func (h *Handler) GetUsersLastMonth(c echo.Context) error {

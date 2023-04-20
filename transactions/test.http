@@ -1,10 +1,4 @@
-###Create Transaction
-POST localhost:8586/api/v1/transaction
+###Get Transaction
+GET localhost:8787/api/v1/transaction/{id}
 Content-Type: application/json
-
-{
-  "UID": 1,
-  "BID": 3,
-  "Price": 2
-}
 

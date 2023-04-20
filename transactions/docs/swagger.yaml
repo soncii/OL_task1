@@ -26,16 +26,39 @@ definitions:
     type: object
 info:
   contact: {}
-  description: This is a microservice for book borrowing transactions
+  description: This is a microservice that manages financial transactions of book
+    borrowing
   termsOfService: http://swagger.io/terms/
   title: Transaction API
   version: "1.0"
 paths:
   /transaction:
+    post:
+      consumes:
+      - application/json
+      description: Saves the money transaction for borrowing book
+      parameters:
+      - description: Details of borrowing contains bookID, userID, and the price
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/model.TransactionCreateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.TransactionCreateResp'
+      summary: Register transaction
+      tags:
+      - Transaction
+  /transaction/{tid}:
     get:
       consumes:
       - application/json
-      description: Return transaction information by id
+      description: Returns transaction information by id
       parameters:
       - description: Transaction ID
         in: path
@@ -58,27 +81,6 @@ paths:
           schema:
             type: string
       summary: Get transaction by id
-      tags:
-      - Transaction
-    post:
-      consumes:
-      - application/json
-      description: Saves the money transaction for borrowing book
-      parameters:
-      - description: Details of borrowing contains bookID, userID, and the price
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/model.TransactionCreateReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.TransactionCreateResp'
-      summary: Register transaction
       tags:
       - Transaction
 swagger: "2.0"

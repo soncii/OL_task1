@@ -1,0 +1,76 @@
+# How to work with tests:
+# First register User and Login. Login endpoint will give you JWT token
+# Use JWT Token to access all other endpoints. Token is used without Bearer.
+# Add Books and Users if you want to test functionality. Initially DB is empty
+
+### Register User
+POST localhost:8585/api/v1/user
+Content-Type: application/json
+
+{
+  "Name":"test",
+  "Email":"test",
+  "Password":"12345"
+}
+
+###Login Get Token
+POST localhost:8585/api/v1/login
+Content-Type: application/json
+
+{
+  "Email":"test",
+  "Password":"12345"
+}
+###Add Book
+POST localhost:8585/api/v1/book
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
+Content-Type: application/json
+
+{
+  "Title": "Golang Book Vol.1",
+  "Author": "DamirG"
+}
+### - клиент может взять книгу в аренду за опр сумму
+POST localhost:8585/api/v1/borrow
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
+Content-Type: application/json
+
+{
+  "UID": 1,
+  "BID": 3,
+  "Price": 5000
+}
+### список книг которые сейчас у клиентов и суммарный доход по каждой
+GET localhost:8585/api/v1/books/borrowed
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
+Content-Type: application/json
+
+### Получить текущих пользователей со списком книг который у них сейчас на руках
+GET localhost:8585/api/v1/users
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
+Content-Type: application/json
+### Список пользователей с количеством книг за последний месяц
+GET localhost:8585/api/v1/records/month
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
+Content-Type: application/json
+
+{
+  "Email": "test"
+}
+###Update Password
+POST localhost:8585/api/v1/password
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODExMzI5NzgsImlhdCI6MTY4MTA0NjU3OCwic3ViIjoidGVzdCJ9.tr25SngsA7Sn2xsJLofpUPBz505q72run3KXkXPbUrE
+Content-Type: application/json
+
+{
+  "Password":"123"
+}
+
+### Get All Records of the user
+GET localhost:8585/api/v1/records
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODIwNDY1NzQsImlhdCI6MTY4MTk2MDE3NCwic3ViIjoiRGFtaXIifQ.3RogSSPC-zGaD7vDIF9bzLmIAg0xPgoETQbzyMpJDg0
+Content-Type: application/json
+
+{
+  "Email": "test"
+}

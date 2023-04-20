@@ -23,6 +23,13 @@ definitions:
       createdAt:
         type: string
     type: object
+  model.GetUsersWithRecordResp:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/model.UserWithRecord'
+        type: array
+    type: object
   model.Record:
     properties:
       book:
@@ -49,6 +56,25 @@ definitions:
       price:
         type: number
       uid:
+        type: integer
+    type: object
+  model.RecordWithTransaction:
+    properties:
+      bookID:
+        type: integer
+      borrowed:
+        type: boolean
+      id:
+        type: integer
+      price:
+        type: number
+      returnedAt:
+        type: string
+      takenAt:
+        type: string
+      transactionID:
+        type: integer
+      userID:
         type: integer
     type: object
   model.User:
@@ -90,6 +116,17 @@ definitions:
       email:
         type: string
       password:
+        type: string
+    type: object
+  model.UserWithRecord:
+    properties:
+      count:
+        type: integer
+      email:
+        type: string
+      id:
+        type: integer
+      name:
         type: string
     type: object
 host: localhost:8080
@@ -148,6 +185,10 @@ paths:
             items:
               $ref: '#/definitions/model.Book'
             type: array
+        "500":
+          description: Something went wrong!
+          schema:
+            type: string
       security:
       - BearerAuth: []
       summary: Get all borrowed books with Revenues
@@ -255,6 +296,44 @@ paths:
       summary: Change user password
       tags:
       - User
+  /record/{rid}:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves the record of book borrowing with price by ID
+      parameters:
+      - description: Record ID
+        in: path
+        name: rid
+        required: true
+        type: string
+      - description: JWT Token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.RecordWithTransaction'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get borrow record with price
+      tags:
+      - Record
   /records:
     get:
       consumes:
@@ -302,8 +381,12 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.User'
+              $ref: '#/definitions/model.GetUsersWithRecordResp'
             type: array
+        "500":
+          description: Something went wrong!
+          schema:
+            type: string
       security:
       - BearerAuth: []
       summary: Get all users who borrowed books last month

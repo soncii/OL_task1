@@ -18,8 +18,42 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/transaction": {
+            "post": {
+                "description": "Saves the money transaction for borrowing book",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Transaction"
+                ],
+                "summary": "Register transaction",
+                "parameters": [
+                    {
+                        "description": "Details of borrowing contains bookID, userID, and the price",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.TransactionCreateReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.TransactionCreateResp"
+                        }
+                    }
+                }
+            }
+        },
+        "/transaction/{tid}": {
             "get": {
-                "description": "Return transaction information by id",
+                "description": "Returns transaction information by id",
                 "consumes": [
                     "application/json"
                 ],
@@ -56,38 +90,6 @@ const docTemplate = `{
                         "description": "Internal Server Error",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            },
-            "post": {
-                "description": "Saves the money transaction for borrowing book",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Transaction"
-                ],
-                "summary": "Register transaction",
-                "parameters": [
-                    {
-                        "description": "Details of borrowing contains bookID, userID, and the price",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionCreateReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.TransactionCreateResp"
                         }
                     }
                 }
@@ -144,7 +146,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Transaction API",
-	Description:      "This is a microservice for book borrowing transactions",
+	Description:      "This is a microservice that manages financial transactions of book borrowing",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

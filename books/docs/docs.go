@@ -97,6 +97,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/model.Book"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Something went wrong!",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -260,6 +266,65 @@ const docTemplate = `{
                 }
             }
         },
+        "/record/{rid}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieves the record of book borrowing with price by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Record"
+                ],
+                "summary": "Get borrow record with price",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Record ID",
+                        "name": "rid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "JWT Token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.RecordWithTransaction"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/records": {
             "get": {
                 "security": [
@@ -339,8 +404,14 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.User"
+                                "$ref": "#/definitions/model.GetUsersWithRecordResp"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong!",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -470,6 +541,17 @@ const docTemplate = `{
                 }
             }
         },
+        "model.GetUsersWithRecordResp": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.UserWithRecord"
+                    }
+                }
+            }
+        },
         "model.Record": {
             "type": "object",
             "properties": {
@@ -509,6 +591,35 @@ const docTemplate = `{
                     "type": "number"
                 },
                 "uid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.RecordWithTransaction": {
+            "type": "object",
+            "properties": {
+                "bookID": {
+                    "type": "integer"
+                },
+                "borrowed": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "returnedAt": {
+                    "type": "string"
+                },
+                "takenAt": {
+                    "type": "string"
+                },
+                "transactionID": {
+                    "type": "integer"
+                },
+                "userID": {
                     "type": "integer"
                 }
             }
@@ -573,6 +684,23 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.UserWithRecord": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
